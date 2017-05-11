@@ -40,7 +40,11 @@ class llg {
                     curwordlinks.add(new Integer(j));
                 }
             }
-            graph[i] = curwordlinks.stream().mapToInt(x -> x).toArray();
+            int s = curwordlinks.size();
+            graph[i] = new int [s];
+            for (j=0; j < s; j++) {
+                graph[i][j] = curwordlinks.get(j);
+            }
         }
 
         for (int k: (new PathSeeker()).longestChain(graph)) {
