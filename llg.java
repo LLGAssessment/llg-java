@@ -43,13 +43,6 @@ class llg {
             }
         }
 
-        //for (i=0; i < wordlist.length; i++) {
-        //    System.out.print(wordlist[i] + ": ");
-        //    for (Integer k : graph.get(i)) {
-        //        System.out.print(wordlist[k] + ", ");
-        //    }
-        //    System.out.println();
-        //}
         for (Integer k: (new PathSeeker()).longestChain(graph)) {
             System.out.println(wordlist[k]);
         }
