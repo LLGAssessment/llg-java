@@ -8,17 +8,17 @@ import java.io.InputStreamReader;
 
 class llg {
     public static void main(String[] args) {
-		Set<String> words = new HashSet<String>();
-		try (InputStreamReader instream = new InputStreamReader(System.in);
-				BufferedReader buffer = new BufferedReader(instream)) {
-			String line;
-			while ((line = buffer.readLine()) != null) {
-				words.add(line.trim());
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			System.exit(1);
-		}
+        Set<String> words = new HashSet<String>();
+        try (InputStreamReader instream = new InputStreamReader(System.in);
+                BufferedReader buffer = new BufferedReader(instream)) {
+            String line;
+            while ((line = buffer.readLine()) != null) {
+                words.add(line.trim());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
         words.remove("");
 
         String [] wordlist = words.toArray(new String[0]);
@@ -27,9 +27,10 @@ class llg {
 
         int [] [] graph = new int[wordlist.length] [];
         int i,j;
-        List<Integer> curwordlinks = new ArrayList<Integer>();
+        int[] curwordlinks = new int[wordlist.length];
+        int curwordlinksIndex = 0;
         for (i=0; i < wordlist.length; i++) {
-            curwordlinks.clear();
+            curwordlinksIndex = 0;
             String left = wordlist[i];
             char leftlast = left.charAt(left.length() - 1);
 
@@ -37,14 +38,11 @@ class llg {
                 if (i == j) continue;
                 String right = wordlist[j];
                 if (leftlast == right.charAt(0)) {
-                    curwordlinks.add(new Integer(j));
+                    curwordlinks[curwordlinksIndex] = j;
+                    curwordlinksIndex++;
                 }
             }
-            int s = curwordlinks.size();
-            graph[i] = new int [s];
-            for (j=0; j < s; j++) {
-                graph[i][j] = curwordlinks.get(j);
-            }
+            graph[i] = Arrays.copyOfRange(curwordlinks, 0, curwordlinksIndex);
         }
 
         for (int k: (new PathSeeker()).longestChain(graph)) {
@@ -62,9 +60,9 @@ class PathSeeker {
         visited[pos] = true;
         stack[depth - 1] = pos;
         if (depth > toppath.length) {
-            toppath = Arrays.copyOfRange(stack, 0, depth);
+            toppath = Arrays.copyOfRange(stack,0,depth);
         }
-        for (Integer i: graph[pos]) {
+        for (int i: graph[pos]) {
             if (!visited[i]) {
                 traverseGraph(graph, i, depth + 1);
             }
