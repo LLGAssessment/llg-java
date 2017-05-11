@@ -21,22 +21,28 @@ class llg {
         }
         words.remove("");
 
-        long[] wordBitmaps = new long[words.size()];
+        String [] wordlist = words.toArray(new String[0]);
+        int [][] graph = GraphBuilder.buildGraph(wordlist);
+
+        for (int k: (new PathSeeker()).longestChain(graph)) {
+            System.out.println(wordlist[k]);
+        }
+    }
+}
+
+class GraphBuilder {
+    public static int [][] buildGraph(String [] wordlist) {
+        long[] wordBitmaps = new long[wordlist.length];
         int wordBitmapsIndex = 0;
-        for (String word : words) {
+        for (String word : wordlist) {
             int first = (int) word.charAt(0);
             int last = (int) word.charAt(word.length() - 1);
             long bitmap = (((long)first) << 32) | (last & 0xffffffffL);
             wordBitmaps[wordBitmapsIndex] = bitmap;
             wordBitmapsIndex++;
-
-            //int first = (int)(bitmap >> 32);
-            //int last = (int)bitmap;
         }
         Arrays.sort(wordBitmaps);
 
-        String [] wordlist = words.toArray(new String[0]);
-        words = null;
         Arrays.sort(wordlist);
 
         int [] [] graph = new int[wordBitmaps.length] [];
@@ -60,9 +66,7 @@ class llg {
             graph[i] = Arrays.copyOfRange(curwordlinks, 0, curwordlinksIndex);
         }
 
-        for (int k: (new PathSeeker()).longestChain(graph)) {
-            System.out.println(wordlist[k]);
-        }
+        return graph;
     }
 }
 
