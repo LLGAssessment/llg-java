@@ -25,11 +25,10 @@ class llg {
         words = null;
         Arrays.sort(wordlist);
 
-        List<List<Integer>> graph = new ArrayList<List<Integer>>();
+        List [] graph = new List[wordlist.length];
         int i,j;
         for (i=0; i < wordlist.length; i++) {
-            List<Integer> current = new ArrayList<Integer>();
-            graph.add(current);
+            graph[i] = new ArrayList<Integer>();
 
             String left = wordlist[i];
             char leftlast = left.charAt(left.length() - 1);
@@ -38,7 +37,7 @@ class llg {
                 if (i == j) continue;
                 String right = wordlist[j];
                 if (leftlast == right.charAt(0)) {
-                    current.add(new Integer(j));
+                    graph[i].add(new Integer(j));
                 }
             }
         }
@@ -54,13 +53,13 @@ class PathSeeker {
     private int [] toppath;
     private int [] stack;
 
-    private void traverseGraph(List<List<Integer>> graph, int pos, int depth) {
+    private void traverseGraph(List [] graph, int pos, int depth) {
         visited[pos] = true;
         stack[depth - 1] = pos;
         if (depth > toppath.length) {
             toppath = Arrays.copyOfRange(stack, 0, depth);
         }
-        for (Integer i: graph.get(pos)) {
+        for (Integer i: (List<Integer>)graph[pos]) {
             if (!visited[i]) {
                 traverseGraph(graph, i, depth + 1);
             }
@@ -68,8 +67,8 @@ class PathSeeker {
         visited[pos] = false;
     }
 
-    public synchronized int[] longestChain(List<List<Integer>> graph) {
-        int gs = graph.size();
+    public synchronized int[] longestChain(List [] graph) {
+        int gs = graph.length;
         visited = new boolean[gs];
         toppath = new int[0];
         stack = new int[gs];
