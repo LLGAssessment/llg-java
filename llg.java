@@ -25,7 +25,7 @@ class llg {
         words = null;
         Arrays.sort(wordlist);
 
-        Integer [] [] graph = new Integer[wordlist.length] [];
+        int [] [] graph = new int[wordlist.length] [];
         int i,j;
         List<Integer> curwordlinks = new ArrayList<Integer>();
         for (i=0; i < wordlist.length; i++) {
@@ -40,10 +40,10 @@ class llg {
                     curwordlinks.add(new Integer(j));
                 }
             }
-            graph[i] = curwordlinks.toArray(new Integer[0]);
+            graph[i] = curwordlinks.stream().mapToInt(x -> x).toArray();
         }
 
-        for (Integer k: (new PathSeeker()).longestChain(graph)) {
+        for (int k: (new PathSeeker()).longestChain(graph)) {
             System.out.println(wordlist[k]);
         }
     }
@@ -54,7 +54,7 @@ class PathSeeker {
     private int [] toppath;
     private int [] stack;
 
-    private void traverseGraph(Integer [][] graph, int pos, int depth) {
+    private void traverseGraph(int [][] graph, int pos, int depth) {
         visited[pos] = true;
         stack[depth - 1] = pos;
         if (depth > toppath.length) {
@@ -68,7 +68,7 @@ class PathSeeker {
         visited[pos] = false;
     }
 
-    public synchronized int[] longestChain(Integer [][] graph) {
+    public synchronized int[] longestChain(int [][] graph) {
         int gs = graph.length;
         visited = new boolean[gs];
         toppath = new int[0];
