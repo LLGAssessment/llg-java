@@ -56,9 +56,9 @@ class PathSeeker {
 
     private void traverseGraph(List<List<Integer>> graph, int pos, int depth) {
         visited[pos] = true;
-        stack[depth] = pos;
+        stack[depth - 1] = pos;
         if (depth > toppath.length) {
-            toppath = Arrays.copyOfRange(stack, 0, depth + 1);
+            toppath = Arrays.copyOfRange(stack, 0, depth);
         }
         for (Integer i: graph.get(pos)) {
             if (!visited[i]) {
@@ -75,7 +75,7 @@ class PathSeeker {
         stack = new int[gs];
 
         for (int i=0; i < gs; i++) {
-            traverseGraph(graph, i, 0);
+            traverseGraph(graph, i, 1);
         }
         return toppath;
     }
