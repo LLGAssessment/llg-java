@@ -21,23 +21,38 @@ class llg {
         }
         words.remove("");
 
+        long[] wordBitmaps = new long[words.size()];
+        int wordBitmapsIndex = 0;
+        for (String word : words) {
+            int first = (int) word.charAt(0);
+            int last = (int) word.charAt(word.length() - 1);
+            long bitmap = (((long)first) << 32) | (last & 0xffffffffL);
+            wordBitmaps[wordBitmapsIndex] = bitmap;
+            wordBitmapsIndex++;
+
+            //int first = (int)(bitmap >> 32);
+            //int last = (int)bitmap;
+        }
+        Arrays.sort(wordBitmaps);
+
         String [] wordlist = words.toArray(new String[0]);
         words = null;
         Arrays.sort(wordlist);
 
-        int [] [] graph = new int[wordlist.length] [];
+        int [] [] graph = new int[wordBitmaps.length] [];
         int i,j;
-        int[] curwordlinks = new int[wordlist.length];
+        int[] curwordlinks = new int[wordBitmaps.length];
         int curwordlinksIndex = 0;
-        for (i=0; i < wordlist.length; i++) {
+        for (i=0; i < wordBitmaps.length; i++) {
             curwordlinksIndex = 0;
-            String left = wordlist[i];
-            char leftlast = left.charAt(left.length() - 1);
+            long left = wordBitmaps[i];
+            int leftlast = (int) left;
 
-            for (j=0; j < wordlist.length; j++) {
+            for (j=0; j < wordBitmaps.length; j++) {
                 if (i == j) continue;
-                String right = wordlist[j];
-                if (leftlast == right.charAt(0)) {
+                long right = wordBitmaps[j];
+                int rightfirst = (int)(right >> 32);
+                if (leftlast == rightfirst) {
                     curwordlinks[curwordlinksIndex] = j;
                     curwordlinksIndex++;
                 }
