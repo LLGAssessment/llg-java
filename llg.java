@@ -41,9 +41,6 @@ class GraphBuilder {
             wordBitmaps[wordBitmapsIndex] = bitmap;
             wordBitmapsIndex++;
         }
-        Arrays.sort(wordBitmaps);
-
-        Arrays.sort(wordlist);
 
         int [] [] graph = new int[wordBitmaps.length] [];
         int i,j;
